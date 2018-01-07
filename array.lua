@@ -1,14 +1,43 @@
 local Class = require('class')
 local deepcopy = require('deepcopy')
 
-local Array = Class.new()
-function Array:init()
-    self._data = {}          -- table to store actual data
-    self._shape = {}         -- shape of the data table
+local function _genDataTable(fillValue, ...)
+    local fillValue = fillValue or 0
+    local axes = {...}
+    local numDim = #axes
+
+    if numDim < 1 then
+        error("Dimension < 1")
+    end
+
+    if numDim == 1 then
+        for i = 1, axes[1] do
+            local outTable = {}
+            outTable[i] = fillValue
+        end
+        return outTable
+
+    else
+        local outTable = {}
+        print(unpack(axes))
+        for i = 1, table.remove(axes, 1) do
+            outTable[i] = _genDataTable(fillValue, unpack(axes))
+        end
+        return outTable
+    end
 end
 
+
+local Array = Class.new()
+function Array:init(...)
+    local shape = {...}
+    self._shape = shape
+    self._data = _genDataTable(0, unpack(shape))
+end
+
+
 function Array:slice(...)
-    
+
 end
 
 function Array:getShapeFromDataTable()
@@ -22,8 +51,8 @@ function Array:getShapeFromDataTable()
     return shape
 end
 
-function Array:shape() 
-    return deepcopy(self.shape)
+function Array:getShape()
+    return deepcopy(self._shape)
 end
 
 return Array
