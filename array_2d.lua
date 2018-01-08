@@ -175,14 +175,6 @@ function Array2D:slice(i_start, i_end, i_step, j_start, j_end, j_step)
     return outArr
 end
 
-
-
-
-
-
-
-
-
 function Array2D:__tostring()
     local outString = ""
     for i, row in ipairs(self._data) do
