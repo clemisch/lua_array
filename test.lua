@@ -1,4 +1,4 @@
-Array = require("array_2d")
+local Array = require("array_2d")
 
 function range(start, stop, step)
     local step = step or 1
