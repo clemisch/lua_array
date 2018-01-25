@@ -14,4 +14,4 @@ end
 
 a = range(1, 25):reshape(5, 5)
 print(a)
-a:slice(2, 4, 1, 2, 4, 1)
+print(a:slice(2, 4, 1, 2, 4, 1))
