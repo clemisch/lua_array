@@ -1,20 +1,24 @@
 local Class = require('class')
 local deepcopy = require('deepcopy')
 
-local Array = Class.new()
-function Array:init()
+--- @module
+local numlua = {}
+
+
+numlua.Array = Class.new()
+function numlua.Array:init()
     self._data = {}         
     self._strides = {}      
     self._startOffsets = setmetatable({}, {__index = function() return 0 end})  -- positive number     
     self._stopOffsets = setmetatable({}, {__index = function() return 0 end})   -- positive number
 
-    -- XXX: 
+    -- TODO:  
     --  - generate self.shape somewhere
     --  - set ndim
 
 end
 
-function Array:_getShape()
+function numlua.Array:_getShape()
     -- compute shape from strides and offsets
 
     local outShape = {}
@@ -30,14 +34,14 @@ function Array:_getShape()
     return outShape
 end
 
-function Array:ndim()
+function numlua.Array:ndim()
     return #self._strides
 end
 
-function Array:view()
+function numlua.Array:view()
     -- return new view on data 
 
-    local outArr = Array()
+    local outArr = numlua.Array()
 
     -- view on data
     outArr._data = self._data
@@ -51,7 +55,7 @@ function Array:view()
     return outArr
 end
 
-function Array:_getByPositiveIndex(...)
+function numlua.Array:_getByPositiveIndex(...)
     --[[
     Get single data point by ṕositive index.
 
@@ -85,12 +89,12 @@ function Array:_getByPositiveIndex(...)
 end
 
 
-function Array:reshape(...)
+function numlua.Array:reshape(...)
     local newShape = {...}
 
 end
 
-function Array:T()
+function numlua.Array:T()
     if self:ndim() ~= 2 then
         error(":T() only works with 2D arrays")
     end
@@ -107,39 +111,20 @@ end
 
 
 -- functions to generate arrays
-function toArray(t)
+function numlua.toArray(t)
 end
 
-function zeros(...)
+function numlua.zeros(...)
 end
 
-function ones(...)
+function numlua.ones(...)
 end
 
-function range(start, stop, step)
+function numlua.range(start, stop, step)
 end
 
-function linspace(start, stop, numSteps, endpoint)
+function numlua.linspace(start, stop, numSteps, endpoint)
 end
 
 
--------------
--- TESTING --
--------------
-
-t = {}
-for i = 1, 12 do t[i] = i end
-
-a = Array()
-a._data = t
-a._strides[1] = 6
-a._strides[2] = 1
-b = a:view()
-
-shape = a:_getShape()
-print(unpack(shape))
-print(unpack(a:T():_getShape()))
-print(a:ndim())
-print(a:_getByPositiveIndex(2, 1))
-
-print()
+return numlua
